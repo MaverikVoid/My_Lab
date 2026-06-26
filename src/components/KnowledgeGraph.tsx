@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Network, Link2, BookOpen, FileCode, Edit3, HelpCircle } from "lucide-react";
+import { Network, Link2, BookOpen, FileCode, Edit3, HelpCircle, Activity, Compass } from "lucide-react";
 
 interface Node {
   id: string;
@@ -12,6 +12,9 @@ interface Node {
   description: string;
   projects: string[];
   articles: { title: string; slug: string }[];
+  questions: string[];
+  diary: string[];
+  timeline: string[];
   notes: string;
   connections: string[];
 }
@@ -29,6 +32,13 @@ const graphNodes: Node[] = [
       { title: "Understanding PDE Residual Geometry", slug: "residual-geometry" },
       { title: "Notes on Scientific Foundation Models", slug: "scientific-foundation-notes" }
     ],
+    questions: [
+      "How can optimization algorithms exploit the structure of PDE residuals?",
+      "Can optimization methods adapt automatically to stiffness in PINNs?",
+      "How can scientific foundation models generalize across multiple physical systems?"
+    ],
+    diary: ["Week 1: Neural Operators", "Week 3: SCIO Testing"],
+    timeline: ["Started Physics-Informed ML (2025)", "Brown University Research Intern (2025)"],
     notes: "Grey-box systems combine the parameter speed of deep learning with the numerical stability of traditional mechanics.",
     connections: ["optimization", "pdes", "pinns", "neural-operators", "scientific-computing"]
   },
@@ -42,6 +52,12 @@ const graphNodes: Node[] = [
     articles: [
       { title: "Optimization Beyond Adam", slug: "optimization-beyond-adam" }
     ],
+    questions: [
+      "How can optimization algorithms exploit the structure of PDE residuals?",
+      "Can optimization methods adapt automatically to stiffness in PINNs?"
+    ],
+    diary: ["Week 3: SCIO Testing"],
+    timeline: ["Developed SCIO (2025)", "IEEE TETCI Submission (2026)"],
     notes: "Every learning algorithm is fundamentally a path optimization through a loss landscape.",
     connections: ["scientific-ml", "finance", "pinns", "control-theory", "agentic-ai"]
   },
@@ -56,6 +72,12 @@ const graphNodes: Node[] = [
       { title: "Why PINNs Fail on Stiff PDEs", slug: "why-pinns-fail" },
       { title: "Understanding PDE Residual Geometry", slug: "residual-geometry" }
     ],
+    questions: [
+      "How can optimization algorithms exploit the structure of PDE residuals?",
+      "Can optimization methods adapt automatically to stiffness in PINNs?"
+    ],
+    diary: ["Week 1: Neural Operators", "Week 3: SCIO Testing"],
+    timeline: ["Started Physics-Informed ML (2025)"],
     notes: "PDEs represent the continuous mathematical limits of local space-time interactions.",
     connections: ["scientific-ml", "neural-operators", "pinns", "scientific-computing", "functional-analysis"]
   },
@@ -69,6 +91,9 @@ const graphNodes: Node[] = [
     articles: [
       { title: "Notes on Scientific Foundation Models", slug: "scientific-foundation-notes" }
     ],
+    questions: ["How can scientific foundation models generalize across multiple physical systems?"],
+    diary: ["Week 1: Neural Operators", "Week 2: DeepONet Implementation"],
+    timeline: ["Brown University Research Intern (2025)"],
     notes: "Unlike typical ML which is grid-bound, operators map functions directly to functions.",
     connections: ["pdes", "scientific-ml", "transformers", "functional-analysis"]
   },
@@ -82,6 +107,9 @@ const graphNodes: Node[] = [
     articles: [
       { title: "Why PINNs Fail on Stiff PDEs", slug: "why-pinns-fail" }
     ],
+    questions: ["Can optimization methods adapt automatically to stiffness in PINNs?"],
+    diary: ["Week 3: SCIO Testing"],
+    timeline: ["Started Physics-Informed ML (2025)", "Developed SCIO (2025)"],
     notes: "Soft boundaries lead to stiffness; enforcing boundary criteria algebraically is essential.",
     connections: ["scientific-ml", "optimization", "pdes"]
   },
@@ -95,6 +123,9 @@ const graphNodes: Node[] = [
     articles: [
       { title: "Notes on Scientific Foundation Models", slug: "scientific-foundation-notes" }
     ],
+    questions: ["How can scientific foundation models generalize across multiple physical systems?"],
+    diary: ["Week 2: DeepONet Implementation"],
+    timeline: [],
     notes: "Attention masks behave mathematically as adaptive kernel solvers for operator propagation.",
     connections: ["neural-operators", "agentic-ai"]
   },
@@ -106,6 +137,9 @@ const graphNodes: Node[] = [
     description: "Feedback loops, optimal trajectory stabilization, and Pontryagin's maximum principles.",
     projects: [],
     articles: [],
+    questions: ["How can autonomous AI agents accelerate scientific discovery?"],
+    diary: [],
+    timeline: [],
     notes: "Optimal control and neural backpropagation share the exact same adjoint-state mechanics.",
     connections: ["optimization", "finance", "agentic-ai"]
   },
@@ -117,6 +151,9 @@ const graphNodes: Node[] = [
     description: "Dynamical price systems, volatility estimations, and non-equilibrium thermodynamic market models.",
     projects: [],
     articles: [],
+    questions: [],
+    diary: [],
+    timeline: [],
     notes: "Liquidity profiles flow according to localized micro-thermodynamic force fields.",
     connections: ["optimization", "control-theory"]
   },
@@ -128,6 +165,9 @@ const graphNodes: Node[] = [
     description: "Autonomous reasoning loops, experimental hypothesis generators, and Active Inference systems.",
     projects: [],
     articles: [],
+    questions: ["How can autonomous AI agents accelerate scientific discovery?"],
+    diary: [],
+    timeline: [],
     notes: "Variational free energy minimization forces agents to modify the environment to match expectations.",
     connections: ["optimization", "transformers", "control-theory"]
   },
@@ -139,6 +179,9 @@ const graphNodes: Node[] = [
     description: "The mathematics of infinite-dimensional spaces, operators, and spectral decomposition functions.",
     projects: [],
     articles: [],
+    questions: ["How can scientific foundation models generalize across multiple physical systems?"],
+    diary: ["Week 1: Neural Operators"],
+    timeline: [],
     notes: "The weight space of infinitely wide neural networks behaves according to reproducing kernel Hilbert space bounds.",
     connections: ["neural-operators", "pdes"]
   },
@@ -152,6 +195,9 @@ const graphNodes: Node[] = [
     articles: [
       { title: "Understanding PDE Residual Geometry", slug: "residual-geometry" }
     ],
+    questions: ["Can optimization methods adapt automatically to stiffness in PINNs?"],
+    diary: ["Week 3: SCIO Testing"],
+    timeline: ["Enrolled in Integrated AI at NIT Surat (2024)"],
     notes: "Moving from traditional static grid meshes to continuous, differentiable numerical maps.",
     connections: ["pdes", "scientific-ml", "optimization"]
   }
@@ -342,12 +388,12 @@ export default function KnowledgeGraph() {
 
                   {/* Connected Projects */}
                   {selectedNode.projects.length > 0 && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 border-t border-border-dim/30 pt-3">
                       <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted flex items-center space-x-1">
-                        <FileCode className="h-3 w-3" />
+                        <FileCode className="h-3 w-3 text-sci-blue" />
                         <span>Core Research Projects</span>
                       </span>
-                      <ul className="text-[11px] space-y-1 list-disc list-inside text-foreground/80 pl-1">
+                      <ul className="text-[11px] space-y-1 list-disc list-inside text-foreground/85 pl-1">
                         {selectedNode.projects.map((proj, i) => (
                           <li key={i} className="hover:text-sci-blue transition-colors">
                             {proj}
@@ -357,11 +403,60 @@ export default function KnowledgeGraph() {
                     </div>
                   )}
 
+                  {/* Related Active Questions */}
+                  {selectedNode.questions.length > 0 && (
+                    <div className="space-y-1.5 border-t border-border-dim/30 pt-3">
+                      <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted flex items-center space-x-1">
+                        <HelpCircle className="h-3 w-3 text-sci-blue" />
+                        <span>Active Research Questions</span>
+                      </span>
+                      <ul className="text-[11px] space-y-1.5 list-none text-foreground/85 pl-1">
+                        {selectedNode.questions.map((q, i) => (
+                          <li key={i} className="flex items-start space-x-1 text-[11px] leading-relaxed font-serif italic text-text-muted border-l border-border-dim/50 pl-2">
+                            <span>&ldquo;{q}&rdquo;</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Logbook Diary Entries */}
+                  {selectedNode.diary.length > 0 && (
+                    <div className="space-y-1.5 border-t border-border-dim/30 pt-3">
+                      <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted flex items-center space-x-1">
+                        <Activity className="h-3 w-3 text-sci-blue" />
+                        <span>Recent Lab Logs</span>
+                      </span>
+                      <div className="flex flex-wrap gap-1 pl-1">
+                        {selectedNode.diary.map((entry, i) => (
+                          <span key={i} className="font-mono text-[8px] bg-badge-bg px-2 py-0.5 rounded text-text-muted">
+                            {entry}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Academic Timeline Milestones */}
+                  {selectedNode.timeline.length > 0 && (
+                    <div className="space-y-1.5 border-t border-border-dim/30 pt-3">
+                      <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted flex items-center space-x-1">
+                        <Compass className="h-3 w-3 text-sci-blue" />
+                        <span>Timeline Milestones</span>
+                      </span>
+                      <ul className="text-[11px] space-y-1 list-disc list-inside text-foreground/80 pl-1 font-mono text-[9px] tracking-wide">
+                        {selectedNode.timeline.map((event, i) => (
+                          <li key={i}>{event}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   {/* Connected Articles */}
                   {selectedNode.articles.length > 0 && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1.5 border-t border-border-dim/30 pt-3">
                       <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted flex items-center space-x-1">
-                        <BookOpen className="h-3 w-3" />
+                        <BookOpen className="h-3 w-3 text-sci-blue" />
                         <span>Associated Essays</span>
                       </span>
                       <div className="space-y-1 pl-1">
@@ -369,7 +464,7 @@ export default function KnowledgeGraph() {
                           <a
                             key={i}
                             href={`#thinking-${art.slug}`}
-                            className="block text-[11px] text-foreground/80 hover:text-sci-blue transition-colors underline decoration-border-dim underline-offset-2"
+                            className="block text-[11px] text-sci-blue hover:underline font-mono text-[10px]"
                             onClick={(e) => {
                               e.preventDefault();
                               const el = document.getElementById(`thinking-${art.slug}`);

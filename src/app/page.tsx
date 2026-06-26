@@ -77,40 +77,47 @@ export default function Home() {
               >
                 Meet Dabgar
               </h1>
-              <p className="font-mono text-xs uppercase tracking-wider text-sci-blue font-bold">
-                Scientific Machine Learning Researcher
+              <p className="font-mono text-xs sm:text-sm uppercase tracking-wider text-sci-blue font-bold max-w-2xl leading-relaxed">
+                Building optimization algorithms that learn the geometry of scientific problems.
               </p>
               <p className="font-serif text-sm italic text-text-muted">
                 Optimization &bull; Physics-Informed Machine Learning &bull; Scientific Computing
               </p>
             </div>
-
+ 
             {/* Scientific Intent Statement */}
             <p
               data-cursor="text"
               className="font-serif text-base sm:text-lg lg:text-xl max-w-3xl leading-relaxed text-foreground/90 font-light"
             >
-              I develop optimization methods and machine learning algorithms for scientific computing, with a focus on Physics-Informed Machine Learning and scientific foundation models. My research aims to make scientific AI more stable, efficient, and mathematically grounded.
+              My work begins where conventional optimizers fail. I study why neural networks struggle with scientific systems and build optimization algorithms that exploit mathematical structure rather than treating physics as another loss function.
             </p>
           </motion.div>
-
+ 
           {/* Action Trigger */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="pt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+            className="pt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 max-w-lg sm:max-w-none"
           >
             <button
               onClick={() => scrollToSection("research")}
               data-cursor="button"
-              className="inline-flex items-center space-x-2 font-mono text-[10px] uppercase tracking-wider text-background bg-foreground hover:bg-sci-blue hover:text-white px-6 py-4 rounded transition-all duration-300 cursor-pointer shadow-sm"
+              className="inline-flex items-center justify-center space-x-2 font-mono text-[10px] uppercase tracking-wider text-background bg-foreground hover:bg-sci-blue hover:text-white px-6 py-4 rounded transition-all duration-300 cursor-pointer shadow-sm"
             >
               <span>Enter the Laboratory</span>
               <ArrowDown className="h-3 w-3 animate-bounce" />
             </button>
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-command-search"))}
+              data-cursor="button"
+              className="inline-flex items-center justify-center space-x-2 font-mono text-[10px] uppercase tracking-wider text-foreground border border-border-dim hover:border-sci-blue hover:text-sci-blue px-6 py-4 rounded transition-all duration-300 cursor-pointer bg-transparent"
+            >
+              <span>Search Database (Ctrl+K)</span>
+            </button>
             <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted sm:ml-2">
-              Scroll down to explore the evolution of ideas.
+              Scroll or search to explore coordinates of study.
             </span>
           </motion.div>
         </section>

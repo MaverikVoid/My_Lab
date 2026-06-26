@@ -3,6 +3,8 @@ import { Newsreader, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import ConceptLinkOverlay from "@/components/ConceptLinkOverlay";
+import CommandPalette from "@/components/CommandPalette";
+
 
 const newsreader = Newsreader({
   variable: "--font-serif",
@@ -60,6 +62,7 @@ export default function RootLayout({
         {children}
         <ConceptLinkOverlay />
         <CustomCursor />
+        <CommandPalette />
       </body>
     </html>
   );

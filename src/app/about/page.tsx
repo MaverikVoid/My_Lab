@@ -14,28 +14,16 @@ interface ThinkingPrinciple {
 
 const principles: ThinkingPrinciple[] = [
   {
-    title: "First Principles",
-    description: "I strive to understand the foundational mathematics of a model or algorithm before using its high-level API abstractions."
+    title: "Why I chose optimization instead of LLMs",
+    description: "Large Language Models focus on mapping statistical structures in text. I am drawn to physical reality. Optimization acts as the continuous bridge that maps physical laws directly to parameter manifolds—navigating loss landscapes is how we compute physical truth."
   },
   {
-    title: "Mathematical Rigor",
-    description: "Rigorous analytical formulations and bounding proofs dictate convergence. Intuition must always be verified by mathematical proofs."
+    title: "Why I care about stiff PDEs",
+    description: "Stiffness represents multi-scale transitions occurring at vastly different scales, such as shock waves or chemical reactions. Standard deep learning fails completely here. Navigating stiffness is the ultimate trial of computational stability."
   },
   {
-    title: "Experiment before Opinion",
-    description: "Computational experiments are the final arbiter of analytical truth. Run the code before forming permanent assertions."
-  },
-  {
-    title: "Failure teaches more than success",
-    description: "System divergences, exploding gradients, and boundary failures reveal the true structural weaknesses of a system."
-  },
-  {
-    title: "Cross-disciplinary thinking",
-    description: "Breakthroughs occur at the intersections. Connecting physics, dynamical systems, and optimization reveals elegant synergies."
-  },
-  {
-    title: "Scientific honesty",
-    description: "Documenting code and experiments transparently, especially the failures, is the only way to drive genuine research progress."
+    title: "Why mathematics still matters in AI",
+    description: "Empirical curve-fitting produces black-boxes that collapse when evaluated out-of-distribution. Rigorous numerical analysis and analytical bounds are the only mathematical insurance policy for safety-critical scientific deployments."
   }
 ];
 
@@ -51,27 +39,32 @@ const journeyTimeline: JourneyNode[] = [
   {
     phase: "2024",
     title: "Academic Foundations",
-    description: "Started my Integrated B.Tech–M.Tech in AI at NIT Surat, establishing foundations in calculus, linear algebra, and scientific computing."
+    description: "Enrolled in the Integrated B.Tech–M.Tech in AI at NIT Surat because I wanted to understand the mathematical principles behind intelligence, rather than just training packages."
   },
   {
     phase: "2025",
-    title: "Machine Learning & Projects",
-    description: "Built practical recommendation models and started studying Physics-Informed ML, observing the convergence issues in PINN models."
+    title: "Machine Learning & Recommenders",
+    description: "Built statistical recommendation models because I wanted to test data modeling in practice, which quickly made me realize that black-box ML lacks physical grounding and reliability."
+  },
+  {
+    phase: "2025",
+    title: "Physics-Informed ML",
+    description: "Shifted focus towards Scientific ML and PINNs because I wanted to see how physical laws can constrain model parameters, leading me to discover convergence failure modes on stiff boundary equations."
   },
   {
     phase: "2025",
     title: "SCIO Development",
-    description: "Developed SCIO (Stiffness-Conditioned Interpolated Optimizer) in JAX to address learning stiffness in neural solvers."
+    description: "Developed SCIO (Stiffness-Conditioned Interpolated Optimizer) in JAX because I realized conventional optimizers treat residuals as black-box losses, failing to navigate local curvature stiffness."
   },
   {
     phase: "2025",
     title: "Brown Internship",
-    description: "Invited to work as a Research Intern at Brown University under the guidance of Khemraj Shukla, studying stiff PDEs and neural operators."
+    description: "Began work as a Research Intern at Brown University under Khemraj Shukla because my SCIO work on stiff PINNs aligned with their focus on solving challenging high-frequency wave equations."
   },
   {
     phase: "2026",
-    title: "Submission & Verification",
-    description: "Submitted SCIO manuscript to IEEE TETCI and continuing work to expand the capabilities of scientific AI."
+    title: "IEEE TETCI Submission",
+    description: "Submitted our manuscript detailing stiffness-conditioned optimization bounds because I wanted to share these mathematical pre-conditioning results with the computational intelligence community."
   }
 ];
 
@@ -158,27 +151,19 @@ export default function AboutPage() {
             {/* Left Column: Biography Text */}
             <div className="lg:col-span-3 prose dark:prose-invert journal-body text-sm md:text-base leading-relaxed text-foreground/90 space-y-6">
               <p>
-                I am an Integrated B.Tech–M.Tech student in Artificial Intelligence at NIT Surat.
+                I didn't start with optimization. I started by wondering why Physics-Informed Neural Networks (PINNs) fail on seemingly simple equations. That single question gradually pulled me into numerical analysis, PDEs, and scientific machine learning.
               </p>
               <p>
-                My research focuses on{" "}
-                <span
-                  data-concept="scientific-ml"
-                  data-cursor="text"
-                  className="font-semibold underline decoration-sci-blue/30 hover:decoration-sci-blue cursor-help transition-colors"
-                >
-                  Scientific Machine Learning
-                </span>
-                , particularly optimization methods for Physics-Informed Machine Learning.
+                I am an Integrated B.Tech–M.Tech student in Artificial Intelligence at NIT Surat. My work centers on building optimization algorithms that exploit mathematical structure rather than treating physical laws as black-box loss functions.
               </p>
               <p>
-                I developed SCIO, an optimization algorithm for stiff PDEs in PINNs, and currently work as a Research Intern at Brown University under the guidance of Khemraj Shukla.
+                To solve convergence issues in stiff systems, I developed SCIO (Stiffness-Conditioned Interpolated Optimizer), which led to my current role as a Research Intern at Brown University under the guidance of Khemraj Shukla.
               </p>
               <p>
-                Beyond optimization, I am interested in Neural Operators, Scientific Foundation Models, Dynamical Systems, and Agentic AI for Science.
+                My broader interests cover Neural Operators, Scientific Foundation Models, and Agentic AI for Science. I build software tools in JAX to expand what scientific AI is mathematically trusted to do.
               </p>
               <p className="font-serif italic text-sci-blue pl-4 border-l border-sci-blue/30 text-base md:text-lg">
-                &ldquo;My long-term goal is to develop algorithms that expand the capabilities of scientific AI.&rdquo;
+                &ldquo;I believe the strongest research portfolios don't just show accomplishments—they expose an active, evolving body of thought.&rdquo;
               </p>
             </div>
 
@@ -434,35 +419,45 @@ export default function AboutPage() {
             
             {/* Failure 1 */}
             <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-4">
-              <h4 className="font-serif text-lg font-semibold text-foreground flex items-center justify-between">
-                <span>Attempt 01: Soft PINN boundary loss</span>
+              <div className="flex items-center justify-between border-b border-border-dim/30 pb-2">
+                <h4 className="font-serif text-base font-semibold text-foreground">
+                  Attempt 01: Soft PINN boundary loss
+                </h4>
                 <span className="font-mono text-[8px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded uppercase tracking-wider font-bold">Failed</span>
-              </h4>
+              </div>
               <p className="text-xs leading-relaxed text-foreground/80">
-                <strong>Attempt:</strong> Training neural networks to solve high-frequency Helmholtz cavities using weighted soft boundary penalties.
+                <strong>Attempt:</strong> Solving Helmholtz wave equations with wave-number $k=20$ using weighted soft collocation bounds.
               </p>
+              <div className="p-2.5 font-mono text-[9px] bg-black/40 rounded border border-border-dim/40 text-text-muted">
+                Stdout: [Epoch 14200] loss_domain: 0.8243 | loss_boundary: 1.042e+02 | cos(theta): -0.92 (Gradients opposing)
+              </div>
               <p className="text-xs leading-relaxed text-text-muted border-l-2 border-border-dim pl-3 font-mono">
-                <strong>Reason:</strong> PDE residuals inside the domain dominated the loss gradient space, resulting in severe boundary constraint violations (over 20% L2 error).
+                <strong>Reason:</strong> Collocation domain residuals dominated updates, projecting gradients in opposition to boundary constraints ({"\\nabla L_{domain} \\cdot \\nabla L_{boundary} < 0"}).
               </p>
               <p className="text-xs leading-relaxed text-sci-blue font-serif italic">
-                <strong>Lesson:</strong> Soft weights are highly ill-conditioned. Enforce boundary conditions by construction or switch to dynamic loss weights.
+                <strong>Lesson:</strong> Soft penalty terms yield severe gradient conflicts. Enforce boundary conditions algebraically or use projection-based optimization.
               </p>
             </div>
 
             {/* Failure 2 */}
             <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-4">
-              <h4 className="font-serif text-lg font-semibold text-foreground flex items-center justify-between">
-                <span>Attempt 02: BPTT on chaotic variables</span>
+              <div className="flex items-center justify-between border-b border-border-dim/30 pb-2">
+                <h4 className="font-serif text-base font-semibold text-foreground">
+                  Attempt 02: BPTT on chaotic variables
+                </h4>
                 <span className="font-mono text-[8px] bg-red-500/10 text-red-500 px-2 py-0.5 rounded uppercase tracking-wider font-bold">Failed</span>
-              </h4>
+              </div>
               <p className="text-xs leading-relaxed text-foreground/80">
-                <strong>Attempt:</strong> Optimizing chaotic Lorenz-63 system parameters using automatic differentiation through a JAX-based ODE integrator.
+                <strong>Attempt:</strong> Backpropagation through time (BPTT) using automatic differentiation in JAX to tune parameters of a chaotic Lorenz-63 system.
               </p>
+              <div className="p-2.5 font-mono text-[9px] bg-black/40 rounded border border-border-dim/40 text-text-muted">
+                Stdout: [Epoch 182] Adjoint eigenvalues exceeded 10^14. Gradient output: NaN
+              </div>
               <p className="text-xs leading-relaxed text-text-muted border-l-2 border-border-dim pl-3 font-mono">
-                <strong>Reason:</strong> Sensitivity of trajectory states to parameter values grows exponentially, causing computed adjoint gradients to explode (reaching 10^14) and yield NaNs.
+                <strong>Reason:</strong> Positive Lyapunov exponents cause the adjoint sensitivity vectors to blow up exponentially, causing float overflow.
               </p>
               <p className="text-xs leading-relaxed text-sci-blue font-serif italic">
-                <strong>Lesson:</strong> Standard adjoint backpropagation cannot navigate chaotic manifolds. Stable shadowing algorithms are required.
+                <strong>Lesson:</strong> Standard adjoint differentiation fails on chaotic attractors. Shadowing or ensemble algorithms are required to bound adjoint limits.
               </p>
             </div>
 
@@ -486,27 +481,27 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {/* Card 1: Researchers */}
-            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-2">
-              <h4 className="font-serif text-base font-bold text-foreground">Researchers</h4>
+            {/* Card 1: Research Collaborations */}
+            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-3">
+              <h4 className="font-serif text-base font-bold text-foreground">Research Collaborations</h4>
               <p className="text-xs text-text-muted leading-relaxed">
-                If you are working on operator learning, symplectic models, or differentiable physics, let's collaborate on codebases and formulate joint publications.
+                If you are working on operator learning, stiffness pre-conditioning, or JAX scientific solvers, let's build codebases and formulate joint publications together.
               </p>
             </div>
 
-            {/* Card 2: Students */}
-            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-2">
-              <h4 className="font-serif text-base font-bold text-foreground">Students</h4>
+            {/* Card 2: Speaking & Seminars */}
+            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-3">
+              <h4 className="font-serif text-base font-bold text-foreground">Speaking & Seminars</h4>
               <p className="text-xs text-text-muted leading-relaxed">
-                I am happy to guide or discuss ideas with young scholars who are genuinely obsessed with mathematical modeling and computational sciences.
+                I enjoy sharing my work on stiff PDE optimization, automatic differentiation limitations, and physics-regularized deep architectures at seminars.
               </p>
             </div>
 
-            {/* Card 3: Founders & Engineers */}
-            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-2">
-              <h4 className="font-serif text-base font-bold text-foreground">Founders & Engineers</h4>
+            {/* Card 3: Open Source & Internships */}
+            <div className="border border-border-dim rounded-lg bg-card-bg p-6 space-y-3">
+              <h4 className="font-serif text-base font-bold text-foreground">Open Source & Internships</h4>
               <p className="text-xs text-text-muted leading-relaxed">
-                Let's discuss physical simulations, custom optimization runtimes, and building intelligent physical systems.
+                I build and maintain modular solver frameworks. Always interested in collaborative open-source packages or computational intern opportunities.
               </p>
             </div>
 

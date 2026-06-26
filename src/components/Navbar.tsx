@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Sun, Moon, Cpu, MousePointer } from "lucide-react";
+import { Sun, Moon, Cpu, MousePointer, Search } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isCursorDisabled, setIsCursorDisabled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -22,6 +24,51 @@ export default function Navbar() {
     // Determine cursor toggle state on mount
     setIsCursorDisabled(localStorage.getItem("custom-cursor-disabled") === "true");
   }, []);
+
+  // Section Observer on homepage
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const sections = ["questions", "research", "knowledge-graph", "thinking", "diary", "timeline"];
+    
+    // Set first section active if at top of page
+    const handleScroll = () => {
+      if (window.scrollY < 200) {
+        setActiveSection("");
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -55% 0px", // triggers when section is in upper-middle viewport
+      threshold: 0.05
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, [pathname]);
 
   const toggleCursor = () => {
     const newVal = !isCursorDisabled;
@@ -70,12 +117,21 @@ export default function Navbar() {
     }
   };
 
+  const navItems = [
+    { id: "questions", label: "Questions" },
+    { id: "research", label: "Research" },
+    { id: "knowledge-graph", label: "Graph" },
+    { id: "thinking", label: "Thinking" },
+    { id: "diary", label: "Diary" },
+    { id: "timeline", label: "Timeline" }
+  ];
+
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border-dim bg-background/95 py-4 transition-colors duration-300">
       <div className="mx-auto max-w-6xl px-6 md:px-8">
         <div className="flex h-12 items-center justify-between">
           {/* Logo / Title */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={handleLogoClick} data-cursor="button">
+          <div className="flex items-center space-x-3 cursor-pointer select-none animate-fade-in" onClick={handleLogoClick} data-cursor="button">
             <Cpu className="h-5 w-5 text-sci-blue transition-transform duration-500 hover:rotate-180" />
             <div className="flex flex-col">
               <span className="font-serif text-lg tracking-tight font-medium hover:text-sci-blue transition-colors">
@@ -89,60 +145,60 @@ export default function Navbar() {
 
           {/* Nav Items */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8 font-mono text-xs uppercase tracking-wider text-text-muted">
-            <button
-              onClick={() => handleNavClick("questions")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Questions
-            </button>
-            <button
-              onClick={() => handleNavClick("research")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Research
-            </button>
-            <button
-              onClick={() => handleNavClick("knowledge-graph")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Graph
-            </button>
-            <button
-              onClick={() => handleNavClick("thinking")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Thinking
-            </button>
-            <button
-              onClick={() => handleNavClick("diary")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Diary
-            </button>
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavClick(item.id)}
+                  data-cursor="button"
+                  className={`relative py-1 cursor-pointer transition-colors ${
+                    isActive ? "text-sci-blue font-bold" : "hover:text-foreground"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeTabUnderline"
+                      className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-sci-blue"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+
+            {/* Philosophy Route button */}
             <button
               onClick={handlePhilosophyClick}
               data-cursor="button"
-              className={`hover:text-foreground transition-colors cursor-pointer ${
-                pathname === "/about" ? "text-sci-blue font-bold border-b border-sci-blue/30" : ""
+              className={`relative py-1 cursor-pointer transition-colors ${
+                pathname === "/about" ? "text-sci-blue font-bold" : "hover:text-foreground"
               }`}
             >
-              Philosophy
-            </button>
-            <button
-              onClick={() => handleNavClick("timeline")}
-              data-cursor="button"
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              Timeline
+              <span>Philosophy</span>
+              {pathname === "/about" && (
+                <motion.span
+                  layoutId="activeTabUnderline"
+                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-sci-blue"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
             </button>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1.5">
+            {/* Search Trigger */}
+            <button
+              onClick={() => window.dispatchEvent(new Event("open-command-search"))}
+              data-cursor="button"
+              className="rounded-md p-2 text-text-muted hover:bg-badge-bg hover:text-foreground transition-all duration-300 cursor-pointer flex items-center justify-center"
+              title="Search Database (Ctrl+K)"
+              aria-label="Open database search"
+            >
+              <Search className="h-[18px] w-[18px]" />
+            </button>
+
             {/* Custom Cursor Toggle */}
             <button
               onClick={toggleCursor}
@@ -151,14 +207,14 @@ export default function Navbar() {
               title={isCursorDisabled ? "Enable Premium Cursor" : "Disable Premium Cursor"}
               aria-label="Toggle custom cursor"
             >
-              <MousePointer className={`h-4 w-4 ${isCursorDisabled ? "opacity-30" : "text-sci-blue"}`} />
+              <MousePointer className={`h-[18px] w-[18px] ${isCursorDisabled ? "opacity-35" : "text-sci-blue"}`} />
             </button>
 
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               data-cursor="button"
-              className="rounded-md p-2 text-text-muted hover:bg-badge-bg hover:text-foreground transition-all duration-300 cursor-pointer"
+              className="rounded-md p-2 text-text-muted hover:bg-badge-bg hover:text-foreground transition-all duration-300 cursor-pointer flex items-center justify-center"
               aria-label="Toggle theme"
             >
               {theme === "light" ? (
