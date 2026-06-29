@@ -28,9 +28,9 @@ export const metadata: Metadata = {
   keywords: ["Scientific Machine Learning", "Optimization", "Agentic AI", "PINNs", "Meet Dabgar", "AI Research", "Computational Science"],
   authors: [{ name: "Meet Dabgar" }],
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: "/favicon.jpg",
+    shortcut: "/favicon.jpg",
+    apple: "/favicon.jpg",
   },
 };
 
