@@ -27,6 +27,11 @@ export const metadata: Metadata = {
   description: "Research Engineer working at the intersection of Scientific Machine Learning, Optimization, and Agentic AI.",
   keywords: ["Scientific Machine Learning", "Optimization", "Agentic AI", "PINNs", "Meet Dabgar", "AI Research", "Computational Science"],
   authors: [{ name: "Meet Dabgar" }],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
