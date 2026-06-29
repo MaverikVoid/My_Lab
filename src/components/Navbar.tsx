@@ -32,7 +32,7 @@ export default function Navbar() {
       return;
     }
 
-    const sections = ["questions", "research", "knowledge-graph", "thinking", "diary", "timeline"];
+    const sections = ["about", "research", "projects", "experience", "achievements", "skills", "contact"];
     
     // Set first section active if at top of page
     const handleScroll = () => {
@@ -91,7 +91,7 @@ export default function Navbar() {
   };
 
   const handleNavClick = (id: string) => {
-    if (pathname === "/about") {
+    if (pathname !== "/") {
       router.push(`/#${id}`);
     } else {
       const element = document.getElementById(id);
@@ -102,28 +102,21 @@ export default function Navbar() {
   };
 
   const handleLogoClick = () => {
-    if (pathname === "/about") {
+    if (pathname !== "/") {
       router.push("/");
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
-  const handlePhilosophyClick = () => {
-    if (pathname === "/about") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      router.push("/about");
-    }
-  };
-
   const navItems = [
-    { id: "questions", label: "Questions" },
+    { id: "about", label: "About" },
     { id: "research", label: "Research" },
-    { id: "knowledge-graph", label: "Graph" },
-    { id: "thinking", label: "Thinking" },
-    { id: "diary", label: "Diary" },
-    { id: "timeline", label: "Timeline" }
+    { id: "projects", label: "Projects" },
+    { id: "experience", label: "Experience" },
+    { id: "achievements", label: "Achievements" },
+    { id: "skills", label: "Skills" },
+    { id: "contact", label: "Contact" }
   ];
 
   return (
@@ -138,13 +131,13 @@ export default function Navbar() {
                 Meet Dabgar
               </span>
               <span className="font-mono text-[9px] uppercase tracking-wider text-text-muted">
-                Computational Lab
+                Research Portfolio
               </span>
             </div>
           </div>
 
           {/* Nav Items */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8 font-mono text-xs uppercase tracking-wider text-text-muted">
+          <div className="hidden lg:flex items-center space-x-5 xl:space-x-6 font-mono text-[11px] uppercase tracking-wider text-text-muted">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -167,24 +160,6 @@ export default function Navbar() {
                 </button>
               );
             })}
-
-            {/* Philosophy Route button */}
-            <button
-              onClick={handlePhilosophyClick}
-              data-cursor="button"
-              className={`relative py-1 cursor-pointer transition-colors ${
-                pathname === "/about" ? "text-sci-blue font-bold" : "hover:text-foreground"
-              }`}
-            >
-              <span>Philosophy</span>
-              {pathname === "/about" && (
-                <motion.span
-                  layoutId="activeTabUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-sci-blue"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
-            </button>
           </div>
 
           <div className="flex items-center space-x-1.5">

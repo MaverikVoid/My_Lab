@@ -4,7 +4,7 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import ConceptLinkOverlay from "@/components/ConceptLinkOverlay";
 import CommandPalette from "@/components/CommandPalette";
-
+import { getAllPosts } from "@/lib/mdx";
 
 const newsreader = Newsreader({
   variable: "--font-serif",
@@ -23,9 +23,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meet Dabgar | Digital Research Laboratory",
-  description: "The digital research laboratory of Meet Dabgar. Exploring the convergence of Scientific Machine Learning, Optimization, Neural Operators, and Dynamical Systems.",
-  keywords: ["Scientific Machine Learning", "Optimization", "Neural Operators", "Dynamical Systems", "Meet Dabgar", "AI Research", "Scientific Computing"],
+  title: "Meet Dabgar | Research Engineer Portfolio",
+  description: "Research Engineer working at the intersection of Scientific Machine Learning, Optimization, and Agentic AI.",
+  keywords: ["Scientific Machine Learning", "Optimization", "Agentic AI", "PINNs", "Meet Dabgar", "AI Research", "Computational Science"],
   authors: [{ name: "Meet Dabgar" }],
 };
 
@@ -34,6 +34,34 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Build dynamic search index at build time
+  const categories = ["research", "projects", "experience", "achievements"];
+  const searchIndex: any[] = [
+    {
+      id: "about-me",
+      type: "about",
+      title: "Meet Dabgar - About / Biography",
+      subtitle: "Research Engineer in Scientific ML, Optimization, and Agentic AI",
+      keywords: "biography resume about nit surat brown university khemraj shukla meet dabgar profile background",
+      url: "/#about"
+    }
+  ];
+
+  categories.forEach(cat => {
+    const posts = getAllPosts(cat);
+    posts.forEach(post => {
+      const url = `/#${cat}`;
+      searchIndex.push({
+        id: `${cat}-${post.slug}`,
+        type: cat,
+        title: post.title || post.question || "",
+        subtitle: post.subtitle || post.summary || post.abstract || "",
+        keywords: `${post.title || ""} ${post.subtitle || ""} ${post.summary || ""} ${post.abstract || ""} ${post.tags?.join(" ") || ""} ${cat}`,
+        url
+      });
+    });
+  });
+
   return (
     <html
       lang="en"
@@ -62,7 +90,7 @@ export default function RootLayout({
         {children}
         <ConceptLinkOverlay />
         <CustomCursor />
-        <CommandPalette />
+        <CommandPalette searchIndex={searchIndex} />
       </body>
     </html>
   );

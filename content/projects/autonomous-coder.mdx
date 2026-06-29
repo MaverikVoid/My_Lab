@@ -1,0 +1,24 @@
+---
+title: "Autonomous Coding Agent"
+category: "Agentic AI"
+tags:
+  - LLM Agents
+  - ReAct
+  - AST Parsing
+  - Python
+featured: true
+technologies: "Python, LangChain, LangGraph, LangSmith, FastAPI, Docker, HuggingFace, Groq API, Vector Databases"
+problem: "Traditional code generation models output static code snippets without checking for compilation errors, lint issues, or testing correctness, leaving debugging entirely to the user."
+solution: "Built a self-correcting coding agent that operates in a sandboxed Docker container, running compilers and linters in a ReAct loop to iteratively fix code based on stdout and error messages."
+githubUrl: "https://github.com/MaverikVoid/autonomous-coder"
+demoUrl: ""
+caseStudyUrl: "/projects/autonomous-coder"
+date: "2026-03-10"
+---
+
+The Autonomous Coding Agent uses an AST (Abstract Syntax Tree) parsing loop and compiler warnings to guide the LLM's next action. When a compilation error is encountered:
+
+1. Parse compiler logs for file line numbers.
+2. Locate the failing code snippet using AST markers.
+3. Feed the localized code + build stack trace back to the LLM.
+4. Execute the revised code and run test suites.

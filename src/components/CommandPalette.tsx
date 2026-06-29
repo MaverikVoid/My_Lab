@@ -3,9 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Terminal as TerminalIcon, X, CornerDownLeft, FileText, HelpCircle, BookOpen, Clock, Activity, AlertTriangle } from "lucide-react";
-import { currentQuestions } from "@/content/questions";
-import { researchProjects } from "@/content/research";
-import { diaryEntries } from "@/content/diary";
 import { useRouter, usePathname } from "next/navigation";
 
 interface IndexItem {
@@ -18,7 +15,7 @@ interface IndexItem {
   sectionId?: string;
 }
 
-export default function CommandPalette() {
+export default function CommandPalette({ searchIndex = [] }: { searchIndex?: IndexItem[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"search" | "terminal">("search");
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,69 +32,6 @@ export default function CommandPalette() {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const terminalInputRef = useRef<HTMLInputElement | null>(null);
   const terminalBottomRef = useRef<HTMLDivElement | null>(null);
-
-  // Setup search index
-  const [searchIndex, setSearchIndex] = useState<IndexItem[]>([]);
-
-  useEffect(() => {
-    const index: IndexItem[] = [
-      {
-        id: "about-me",
-        type: "about",
-        title: "Meet Dabgar - Biography",
-        subtitle: "Integrated B.Tech-M.Tech student in AI at NIT Surat & Research Intern at Brown University",
-        keywords: "biography resume about nit surat brown university khemraj shukla meet dabgar profile background",
-        url: "/about",
-        sectionId: "manifesto"
-      },
-      ...researchProjects.map(p => ({
-        id: p.id,
-        type: "project" as const,
-        title: p.title,
-        subtitle: p.subtitle,
-        keywords: `${p.title} ${p.subtitle} ${p.problem} ${p.idea} ${p.method} scio stiffness pinns jax pdes`,
-        url: "/",
-        sectionId: "research"
-      })),
-      ...currentQuestions.map(q => ({
-        id: q.id,
-        type: "question" as const,
-        title: `Question: ${q.question}`,
-        subtitle: q.context,
-        keywords: `${q.question} ${q.context} PDE residual stiffness foundation models inverse sciml agents`,
-        url: "/",
-        sectionId: "questions"
-      })),
-      ...diaryEntries.map(d => ({
-        id: d.week.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase(),
-        type: "diary" as const,
-        title: d.week,
-        subtitle: d.observation,
-        keywords: `${d.week} ${d.experiment} ${d.observation} ${d.mistakes} ${d.deadEnds} ${d.newHypothesis} deeponet operators inverse`,
-        url: "/",
-        sectionId: "diary"
-      })),
-      {
-        id: "failure-helmholtz",
-        type: "failure",
-        title: "Failure 01: Soft PINN boundary loss",
-        subtitle: "Loss space ill-conditioning on high-frequency Helmholtz solver",
-        keywords: "helmholtz soft boundary failure pde residual gradient penalty boundary condition loss weights stiffness",
-        url: "/about",
-        sectionId: "failures"
-      },
-      {
-        id: "failure-chaotic",
-        type: "failure",
-        title: "Failure 02: BPTT on chaotic variables",
-        subtitle: "Exploding adjoint gradients (10^14) on chaotic Lorenz-63 integration",
-        keywords: "lorenz backpropagation BPTT chaotic variables gradient explosion ad automatic differentiation jax adjoint",
-        url: "/about",
-        sectionId: "failures"
-      }
-    ];
-    setSearchIndex(index);
-  }, []);
 
   // Keyboard shortcut listener
   useEffect(() => {
@@ -164,9 +98,9 @@ export default function CommandPalette() {
         "Available shell routines:",
         "  help         Display this context list.",
         "  papers       Show SCIO publication metadata and citation format.",
-        "  failures     Display stdout logs of failed numerical runs.",
-        "  diary        Show latest unpolished laboratory diary entries.",
-        "  philosophy   Display core essays of Meet's research Operating System.",
+        "  projects     List active engineering projects in portfolio.",
+        "  pillars      Display core research engineer focus domains.",
+        "  failures     Display simulated stdout logs of training errors.",
         "  clear        Flush stdout logs from this session.",
         "  close        Terminate command palette interface."
       );
@@ -207,19 +141,20 @@ export default function CommandPalette() {
         "  Warning: residual gradients on collocation bounds are near orthogonal to PDE boundary constraints.",
         "  Convergence stalling: Soft loss weights cannot balance residual manifolds."
       );
-    } else if (trimmed === "diary") {
+    } else if (trimmed === "projects") {
       newLogs.push(
-        "LAB DIARY EXTRACTS:",
-        "  Week 1 (Neural Operators): Studied mapping functions direct across spaces. Grid resolution bounds are bypassed.",
-        "  Week 2 (DeepONet): Bottleneck found in high-frequency detail mapping. Fourier scaling is needed.",
-        "  Week 3 (SCIO test): Tested Allen-Cahn stiffness optimization. Local Hessian eigenvalue updates show promise but are unstable."
+        "ACTIVE PROJECT REGISTRY:",
+        "  [Scientific ML]   SCIO (Stiffness-Conditioned Interpolated Optimizer)",
+        "  [Agentic AI]      Autonomous Coding Agent",
+        "  [Agentic AI]      AI Ops Email Agent",
+        "  [Applied AI]      EchoNeRF (Acoustic Novel View Synthesis)"
       );
-    } else if (trimmed === "philosophy") {
+    } else if (trimmed === "pillars" || trimmed === "philosophy") {
       newLogs.push(
-        "MEET'S OPERATING SYSTEM - RESEARCH PILLARS:",
-        "  Pillar 1: Why I chose optimization instead of LLMs. (LLMs focus on language structure, whereas optimization maps continuous physical manifolds directly).",
-        "  Pillar 2: Why I care about stiff PDEs. (Stiffness represents the continuous, multi-scale limits of space-time interactions. Navigating them is the ultimate optimizer trial).",
-        "  Pillar 3: Why mathematics still matters in AI. (Analytical bounds are the only mathematical insurance policy for safety-critical scientific deployments)."
+        "RESEARCH ENGINEER FOCUS DOMAINS:",
+        "  Pillar 1: Scientific Machine Learning (SciML, PINNs, stiffness pre-conditioning)",
+        "  Pillar 2: Agentic AI (Sandboxed execution, AST-driven self-correcting loops)",
+        "  Pillar 3: Applied AI Systems (NeRF acoustic synthesis, credit risk modeling engines)"
       );
     } else {
       newLogs.push(`Command '${trimmed}' not found. Type 'help' to review available routines.`);
