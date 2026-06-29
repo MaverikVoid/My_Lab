@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Sun, Moon, Cpu, MousePointer, Search } from "lucide-react";
-import { motion } from "framer-motion";
+import { Sun, Moon, Cpu, MousePointer, Search, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isCursorDisabled, setIsCursorDisabled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -91,6 +92,7 @@ export default function Navbar() {
   };
 
   const handleNavClick = (id: string) => {
+    setIsMobileMenuOpen(false);
     if (pathname !== "/") {
       router.push(`/#${id}`);
     } else {
@@ -102,6 +104,7 @@ export default function Navbar() {
   };
 
   const handleLogoClick = () => {
+    setIsMobileMenuOpen(false);
     if (pathname !== "/") {
       router.push("/");
     } else {
@@ -136,7 +139,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Nav Items */}
+          {/* Nav Items (Desktop) */}
           <div className="hidden lg:flex items-center space-x-5 xl:space-x-6 font-mono text-[11px] uppercase tracking-wider text-text-muted">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
@@ -162,7 +165,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-1">
             {/* Search Trigger */}
             <button
               onClick={() => window.dispatchEvent(new Event("open-command-search"))}
@@ -198,9 +201,53 @@ export default function Navbar() {
                 <Sun className="h-[18px] w-[18px] transition-transform duration-300 hover:rotate-45" />
               )}
             </button>
+
+            {/* Mobile Menu Hamburger Toggle */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              data-cursor="button"
+              className="lg:hidden rounded-md p-2 text-text-muted hover:bg-badge-bg hover:text-foreground transition-all duration-300 cursor-pointer flex items-center justify-center"
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-[18px] w-[18px]" />
+              ) : (
+                <Menu className="h-[18px] w-[18px]" />
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Nav Drawer Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="lg:hidden border-t border-border-dim bg-background/98 overflow-hidden"
+          >
+            <div className="flex flex-col space-y-4 px-6 py-6 font-mono text-xs uppercase tracking-wider text-text-muted">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => handleNavClick(item.id)}
+                    className={`text-left py-2 hover:text-foreground transition-colors ${
+                      isActive ? "text-sci-blue font-bold border-l-2 border-sci-blue pl-2" : "pl-2"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

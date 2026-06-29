@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowDown, 
@@ -50,6 +50,28 @@ export default function HomeClient({
   achievements,
 }: HomeClientProps) {
   const [selectedPillar, setSelectedPillar] = useState<string>("all");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const hasLoaded = sessionStorage.getItem("portfolio-loaded");
+    if (hasLoaded) {
+      setIsLoading(false);
+      return;
+    }
+    
+    document.body.style.overflow = "hidden";
+    
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      document.body.style.overflow = "auto";
+      sessionStorage.setItem("portfolio-loaded", "true");
+    }, 3200);
+    
+    return () => {
+      clearTimeout(timer);
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   const pillars = [
     { id: "all", label: "All Coordinates" },
@@ -98,6 +120,65 @@ export default function HomeClient({
 
   return (
     <>
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            key="loader"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="fixed inset-0 z-[100] bg-zinc-950 flex flex-col items-center justify-center space-y-6 select-none pointer-events-none"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{ duration: 3, times: [0, 0.2, 0.8, 1], ease: "easeInOut" }}
+              className="flex flex-col items-center justify-center space-y-4"
+            >
+              <motion.h1 
+                initial={{ scale: 0.96 }}
+                animate={{ scale: 1.04 }}
+                transition={{ duration: 2.2, ease: "easeOut" }}
+                className="font-serif text-6xl md:text-8xl font-light tracking-widest text-foreground"
+              >
+                MD
+              </motion.h1>
+
+              <svg width="200" height="40" viewBox="0 0 200 40" className="overflow-visible">
+                <motion.path
+                  d="M 10 25 Q 50 25 100 10 T 190 25"
+                  fill="none"
+                  stroke="#3b82f6"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.8, delay: 0.5, ease: "easeInOut" }}
+                />
+                <motion.circle
+                  cx="190"
+                  cy="25"
+                  r="3.5"
+                  fill="#3b82f6"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 2.1, type: "spring" }}
+                />
+              </svg>
+
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.65, 0.65, 0] }}
+                transition={{ duration: 3, times: [0, 0.3, 0.8, 1] }}
+                className="font-mono text-[9px] uppercase tracking-widest text-text-muted mt-2"
+              >
+                Solving Preconditioned Boundaries...
+              </motion.span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Mathematical Flow Background */}
       <MathematicalBackground />
 

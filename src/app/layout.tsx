@@ -23,14 +23,37 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meet Dabgar | Research Engineer Portfolio",
-  description: "Research Engineer working at the intersection of Scientific Machine Learning, Optimization, and Agentic AI.",
-  keywords: ["Scientific Machine Learning", "Optimization", "Agentic AI", "PINNs", "Meet Dabgar", "AI Research", "Computational Science"],
+  metadataBase: new URL('https://meetdabgar.com'),
+  title: "Meet Dabgar | Research Engineer",
+  description: "Research Engineer specializing in Scientific Machine Learning, Adaptive Optimization, Physics-Informed AI, Neural Operators, and Agentic AI. Research Intern at Brown University.",
+  keywords: ["Scientific Machine Learning", "Physics-Informed Machine Learning", "Optimization", "PINNs", "Neural Operators", "Agentic AI", "AI Research", "Brown University", "Meet Dabgar"],
   authors: [{ name: "Meet Dabgar" }],
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
     apple: "/favicon.png",
+  },
+  openGraph: {
+    title: "Meet Dabgar | Research Engineer",
+    description: "Research Engineer specializing in Scientific Machine Learning, Adaptive Optimization, Physics-Informed AI, Neural Operators, and Agentic AI. Research Intern at Brown University.",
+    url: "https://meetdabgar.com",
+    siteName: "Meet Dabgar Portfolio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Meet Dabgar | Research Engineer",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Meet Dabgar | Research Engineer",
+    description: "Research Engineer specializing in Scientific Machine Learning, Adaptive Optimization, Physics-Informed AI, Neural Operators, and Agentic AI. Research Intern at Brown University.",
+    images: ["/og-image.png"],
   },
 };
 
